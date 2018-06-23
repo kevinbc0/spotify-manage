@@ -70,15 +70,17 @@ class SpotifyClient(object):
     def get_all_songs_in_playlist(self, playlist):
         offset = 0
         limit = 100
-        ret = []
+        uris = []
+        dates = []
         while True:
             results = self.sp.user_playlist_tracks(
                 config.USERNAME, playlist_id=playlist, limit=limit, offset=offset)
             if len(results['items']) == 0:
                 break
-            ret.extend([item['track']['uri'] for item in results['items']])
+            uris.extend([item['track']['uri'] for item in results['items']])
+            dates.extend([item['added_at'].split('T')[0] for item in results['items']])
             offset += limit
-        return ret
+        return uris, dates
 
     def add_tracks_to_playlist(self, playlist, tracks):
         self.sp.user_playlist_add_tracks(config.USERNAME, playlist, tracks)
