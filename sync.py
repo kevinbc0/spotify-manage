@@ -1,8 +1,9 @@
-import common
+import client
 import datetime
 
 
-def sync(sc):
+def sync_saved(sc):
+    """Sync with changes made to saved tracks."""
     saved_tracks = set(sc.get_all_saved_tracks())
     all_playlists = sc.get_all_owned_playlists()
     playlist_all_uri = all_playlists['all']
@@ -24,11 +25,16 @@ def sync(sc):
         sc.add_tracks_to_playlist(all_playlists['retention'], removed_tracks)
 
 
+def sync_current(sc):
+    """Sync the 'current' playlist."""
+
+
+
 def main():
     dt = datetime.datetime.now()
     print(f'[{str(dt)}] Starting sync')
-    sc = common.get_spotify_client()
-    sync(sc)
+    sc = client.get_spotify_client()
+    sync_saved(sc)
     print(f'Finished sync')
 
 
